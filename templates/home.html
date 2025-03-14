@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Prediction</title>
+    <style>
+        /* Full-screen background image */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("{{ url_for('static', filename='image.png') }}") no-repeat center center fixed;
+            background-size: cover;
+            background-attachment: fixed;
+            color: #333;
+        }
+
+        /* Container styling */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        /* Header styling with blue background */
+        .header {
+            background-color: #007BFF; /* Bright blue background */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            border-bottom: 5px solid #0056b3;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-container label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333; /* Bright, readable color */
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="number"],
+        .form-container input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-container input[type="text"]:focus,
+        .form-container input[type="number"]:focus {
+            border-color: #007BFF;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Blue glow */
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            padding: 15px;
+            background-color: #f1f1f1;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media screen and (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
+
+            .header {
+                font-size: 24px;
+                padding: 15px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-container input[type="submit"] {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Disease Prediction
+        </div>
+        <div class="form-container">
+            <form method="POST" action="{{ url_for('predict') }}" onsubmit="return validateForm()">
+                <label for="fever">Fever (0 for No, 1 for Yes):</label>
+                <input type="number" id="fever" name="Fever" placeholder="Enter 0 or 1" required min="0" max="1">
+
+                <label for="cough">Cough (0 for No, 1 for Yes):</label>
+                <input type="number" id="cough" name="Cough" placeholder="Enter 0 or 1" required min="0" max="1">
+
+                <label for="fatigue">Fatigue (0 for No, 1 for Yes):</label>
+                <input type="number" id="fatigue" name="Fatigue" placeholder="Enter 0 or 1" required min="0" max="1">
+
+                <label for="breathing">Difficulty Breathing (0 for No, 1 for Yes):</label>
+                <input type="number" id="breathing" name="Difficulty Breathing" placeholder="Enter 0 or 1" required min="0" max="1">
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="Age" placeholder="Enter age in years" required min="1" max="120">
+
+                <label for="gender">Gender (Male or Female):</label>
+                <input type="text" id="gender" name="Gender" placeholder="Enter Male or Female" required>
+
+                <label for="blood-pressure">Blood Pressure (Low, Normal, High):</label>
+                <input type="text" id="blood-pressure" name="Blood Pressure" placeholder="Enter Low, Normal, or High" required>
+
+                <label for="cholesterol">Cholesterol Level (Low, Normal, High):</label>
+                <input type="text" id="cholesterol" name="Cholesterol Level" placeholder="Enter Low, Normal, or High" required>
+
+                <input type="submit" value="Predict!">
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2024 Disease Prediction. All rights reserved. | <a href="#">Privacy Policy</a>
+    </div>
+
+    <script>
+        function validateForm() {
+            let age = document.getElementById("age").value;
+            let gender = document.getElementById("gender").value;
+            let bloodPressure = document.getElementById("blood-pressure").value;
+            let cholesterol = document.getElementById("cholesterol").value;
+
+            if (age < 1 || age > 120) {
+                alert("Please enter a valid age.");
+                return false;
+            }
+
+            if (gender.toLowerCase() !== "male" && gender.toLowerCase() !== "female") {
+                alert("Please enter a valid gender (Male or Female).");
+                return false;
+            }
+
+            if (!["low", "normal", "high"].includes(bloodPressure.toLowerCase())) {
+                alert("Please enter a valid blood pressure level (Low, Normal, High).");
+                return false;
+            }
+
+            if (!["low", "normal", "high"].includes(cholesterol.toLowerCase())) {
+                alert("Please enter a valid cholesterol level (Low, Normal, High).");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>
